@@ -73,6 +73,7 @@ public class PetDatabase {
             int choice = myScanner.nextInt();
             
             switch (choice) {
+                //print all pets
                 case 1:
                     printHeader();
                     for(int i=0; i<this.petList.size();i++){
@@ -80,6 +81,8 @@ public class PetDatabase {
                     }
                     printFooter();
                     break;
+                    
+                //add pets
                 case 2:
                     boolean addMore = true;
                     String userInput;
@@ -100,9 +103,35 @@ public class PetDatabase {
                     break;
                 case 4:
                     break;
+                    
+                //search by name
                 case 5:
+                    String nameInput;
+                    Scanner nameScanner = new Scanner(System.in);
+                    System.out.println("Enter a name to search: ");
+                    nameInput = nameScanner.nextLine();
+                    printHeader();
+                    for(int i=0;i<this.petList.size();i++){
+                        if(this.petList.get(i).getName().equals(nameInput)){
+                            printPet(this.petList.get(i));
+                        }
+                    }
+                    printFooter();
                     break;
+                
+                //search by age
                 case 6:
+                    int ageInput;
+                    Scanner ageScanner = new Scanner(System.in);
+                    System.out.println("Enter an age to search: ");
+                    ageInput = ageScanner.nextInt();
+                    printHeader();
+                    for(int i=0;i<this.petList.size();i++){
+                        if(this.petList.get(i).getAge()==ageInput){
+                            printPet(this.petList.get(i));
+                        }
+                    }
+                    printFooter();
                     break;
                 case 7:
                     repeat = false;
