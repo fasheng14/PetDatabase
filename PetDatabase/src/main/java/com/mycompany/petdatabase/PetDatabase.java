@@ -99,9 +99,32 @@ public class PetDatabase {
                         }
                     }
                     break;
+                    
+                //update existing pet
                 case 3:
+                    int updatePet;
+                    String newInfo;
+                    Scanner updateScanner = new Scanner(System.in);
+                    Scanner infoScanner = new Scanner(System.in);
+                    System.out.println("Enter the pet ID to update: ");
+                    updatePet = updateScanner.nextInt();
+                    
+                    System.out.println("Enter new name and new age: ");
+                    newInfo = infoScanner.nextLine();
+                    String[] splitInfo = newInfo.split("\\s+");
+                    this.petList.get(updatePet).setName(splitInfo[0]);
+                    this.petList.get(updatePet).setAge(Integer.parseInt(splitInfo[1]));
                     break;
+
+                    
+                //delete pet
                 case 4:
+                    int delPet;
+                    Scanner delScanner = new Scanner(System.in);
+                    System.out.println("Enter the pet ID to remove: ");
+                    delPet = delScanner.nextInt();
+                    System.out.println(this.petList.get(delPet).getName() + " " + this.petList.get(delPet).getAge() + " is removed.");
+                    this.petList.remove(this.petList.get(delPet));
                     break;
                     
                 //search by name
