@@ -4,7 +4,10 @@
 
 package com.mycompany.petdatabase;
 
+import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -14,7 +17,36 @@ public class PetDatabase {
     
     private ArrayList<Pet> petList = new ArrayList<>();
     private int rowsPrinted = 0;
-   
+    
+    //load file and save contents into petList
+    public void loadFile(String fileName){
+        try {
+            File myLoadFile = new File(fileName);
+            Scanner fileLoadScanner = new Scanner(myLoadFile);
+            while (fileLoadScanner.hasNextLine()){
+                String data = fileLoadScanner.nextLine();
+                System.out.println(data);
+                addPet(data);
+            }
+            fileLoadScanner.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PetDatabase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    //truncate/delete contents in file then save pets to file
+    public void saveFile(String fileName){
+        try {
+            File mySaveFile = new File(fileName);
+            PrintWriter writer = new PrintWriter(fileName);
+            for(int i=0;i<this.petList.size();i++){
+                writer.println(this.petList.get(i).getName() + " " + this.petList.get(i).getAge());
+            }
+            writer.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PetDatabase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     //add pet method
     public void addPet(String input){
@@ -55,19 +87,18 @@ public class PetDatabase {
         this.rowsPrinted = 0;
     }
     
+    //run program
     public void run(){
         boolean repeat = true;
+        loadFile("petFile.txt");
         while (repeat==true){
             Scanner myScanner = new Scanner(System.in);
             System.out.println("""
                                What would you like to do? 
                                1) View all pets 
                                2) Add more pets 
-                               3) Update an existing pet 
-                               4) Remove an existing pet 
-                               5) Search pets by name 
-                               6) Search pets by age 
-                               7) Exit prgram 
+                               3) Remove an existing pet 
+                               4) Exit prgram 
                                Your choice: """);
             
             int choice = myScanner.nextInt();
@@ -99,9 +130,25 @@ public class PetDatabase {
                         }
                     }
                     break;
-                    
-                //update existing pet
+                
+                //delete pet
                 case 3:
+                    int delPet;
+                    Scanner delScanner = new Scanner(System.in);
+                    System.out.println("Enter the pet ID to remove: ");
+                    delPet = delScanner.nextInt();
+                    System.out.println(this.petList.get(delPet).getName() + " " + this.petList.get(delPet).getAge() + " is removed.");
+                    this.petList.remove(this.petList.get(delPet));
+                    break;
+                    
+                //end program
+                case 4:
+                    repeat = false;
+                    break;
+                
+/*                    
+                //update existing pet
+                case 4:
                     int updatePet;
                     String newInfo;
                     Scanner updateScanner = new Scanner(System.in);
@@ -117,16 +164,7 @@ public class PetDatabase {
                     break;
 
                     
-                //delete pet
-                case 4:
-                    int delPet;
-                    Scanner delScanner = new Scanner(System.in);
-                    System.out.println("Enter the pet ID to remove: ");
-                    delPet = delScanner.nextInt();
-                    System.out.println(this.petList.get(delPet).getName() + " " + this.petList.get(delPet).getAge() + " is removed.");
-                    this.petList.remove(this.petList.get(delPet));
-                    break;
-                    
+                
                 //search by name
                 case 5:
                     String nameInput;
@@ -156,13 +194,13 @@ public class PetDatabase {
                     }
                     printFooter();
                     break;
-                case 7:
-                    repeat = false;
-                    break;
+*/
             }
         }
+        saveFile("petFile.txt");
     }
 
+    //MAIN
     public static void main(String[] args) {
         System.out.println("Hello World!");
         new PetDatabase().run();
