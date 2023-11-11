@@ -55,6 +55,25 @@ public class PetDatabase {
         this.petList.add(new Pet(splitInput[0], Integer.parseInt(splitInput[1])));
     }
     
+    //check user input for errors and returns input when fixed
+    public String checkPetInfo(String userInput){
+        Scanner userScanner = new Scanner(System.in);
+        String[] splitPet = userInput.split("\\s+");
+        
+        while(splitPet.length!=2 || Integer.parseInt(splitPet[1])>20){
+            if(splitPet.length==2 && Integer.parseInt(splitPet[1])>20){
+                System.out.println("Error: " + splitPet[1] + " is not a valid age.");
+            }
+            else{
+                System.out.println("Error: " + userInput + " is not a valid input.");
+            }
+            System.out.println("Try again. add pet (name, age): ");
+            userInput = userScanner.nextLine();
+            splitPet = userInput.split("\\s+");
+        }
+        return userInput;
+    }
+    
     //print table header
     public void printHeader(){
         System.out.println("+-------------------------+");
@@ -115,17 +134,22 @@ public class PetDatabase {
                     
                 //add pets
                 case 2:
-                    boolean addMore = true;
+                    //boolean addMore = true;
                     String userInput;
                     //get user input
-                    while(addMore==true){
+                    if(this.petList.size()>=5){
+                        System.out.println("Error: Database is full.");
+                    }
+                    while(this.petList.size()<5){
                         Scanner userScanner = new Scanner(System.in);
-                        System.out.println("add pet (name, age): ");
+                        System.out.println("add pet (name, age) or type 'done' to stop: ");
                         userInput = userScanner.nextLine();
-                        if(userInput.equals("done")){
-                            addMore=false;
+                        String[] splitPet = userInput.split("\\s+");
+                        if(splitPet[0].equals("done")){
+                            break;
                         }
                         else{
+                            userInput = checkPetInfo(userInput);
                             addPet(userInput);
                         }
                     }
